@@ -116,17 +116,20 @@ int simplify(const cv::Mat& imgColor, cv::Mat& imgCode, int numCodes) {
       totalBoundaryWeight += (*it).second.edgeWeight;
       //totalBoundaryLength += (*it).second.edgeLength;
     }
+
     // If a component has a long boundary with moderate edge support,
-    // we don't try to merge that component. Alternately, if a
-    // component has a short boundary, we push a single edge to be
-    // collapsed. Finally, if an edge is of moderate length we push
-    // weighted edges onto the heap.
+    // we don't try to merge that component.
     if(totalBoundaryWeight > 600*128) continue;
-    if(totalBoundaryWeight < 200*128) {// && ns.size() == 1) {
+
+    // Alternately, if a component has a short boundary, we push a
+    // single edge to be collapsed.
+    if(totalBoundaryWeight < 200*128) {
       q.push(pair<float,Edge>(1000000.0f, pair<uint32_t,uint32_t>(i,(*ns.begin()).first)));
       continue;
     }
 
+    // Finally, if an edge is of moderate length we push weighted
+    // edges onto the heap.
     for(map<uint32_t, EdgeInfo>::const_iterator it = ns.begin();
         it != ns.end();
         it++) {

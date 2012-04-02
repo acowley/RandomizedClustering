@@ -124,8 +124,8 @@ void segmentVideo(const char* videoFile) {
 }
 
 bool isVideoFile(const char* fileName) {
-  while(*fileName) fileName++;
-  fileName -= 3;
+  while(*fileName && *fileName != '.') fileName++;
+  if(*fileName) fileName++;
   if(strcmp(fileName, "mp4") == 0 ||
      strcmp(fileName, "mpg") == 0 ||
      strcmp(fileName, "avi") == 0 ||
@@ -135,7 +135,8 @@ bool isVideoFile(const char* fileName) {
 }
 
 int main(int argc, char** argv) {
-  //srand(time(NULL)); // Comment this out to make results repeatable
+  // Seed the PRNG with current milliseconds.
+  // Comment out the srand to make results repeatable.
   struct timeval t;
   gettimeofday(&t, NULL);
   srand((t.tv_sec*1000) + (t.tv_usec / 1000));
